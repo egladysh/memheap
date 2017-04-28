@@ -42,7 +42,7 @@ C++11 or newer
 	
 ## Benchmarks
 
-For benchmarking [src/test/benchmark.cpp](https://github.com/egladysh/memheap/blob/master/src/test/benchmark.cpp): 
+For benchmarking [src/test/benchmark.cpp](https://github.com/egladysh/memheap/blob/master/test/benchmark.cpp): 
 * we allocate thousands of arrays of random sizes from 0 to some limit bytes.
 * then randomly delete about half of them, 
 * then allocate random sized arrays again, 
