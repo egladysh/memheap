@@ -57,7 +57,7 @@ The following benchmarks are for the following configuration.
 
 ### benchmark output
 
-SINGLE-THREAD VERSION
+#### SINGLE-THREAD VERSION
 Random allocations in ranges [0, 32] ... [0, 64] bytes, and 150000 allocations per test<br />
 [malloc speed]/[memheap speed]=2.11074
 
@@ -74,7 +74,7 @@ Random allocations in ranges [0, 524288] ... [0, 1048576] bytes, and 1500 alloca
 [malloc speed]/[memheap speed]=93.1988
 
 
-MULTI-THREAD VERSION
+#### MULTI-THREAD VERSION
 Random allocations in ranges [0, 32] ... [0, 64] bytes, and 150000 allocations per test<br />
 [malloc speed]/[memheap speed]=1.37567
 
