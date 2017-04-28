@@ -45,21 +45,21 @@ namespace memheap
 
 namespace
 {
-    using memheap::msize;
-    
+	using memheap::msize;
+
 	const static msize NODE_ALIGN = (alignof(free_node) == alignof(msize))? 0: alignof(free_node); //already aligning as msize
 	const static msize MIN_BLOCK_SIZE_BYTES_t = (sizeof(free_node) + NODE_ALIGN + 2*sizeof(msize));
 	const static msize MIN_BLOCK_SIZE = ((MIN_BLOCK_SIZE_BYTES_t % sizeof(msize))? MIN_BLOCK_SIZE_BYTES_t + 1: MIN_BLOCK_SIZE_BYTES_t)/sizeof(msize);
-    const static msize MIN_BLOCK_SIZE_BYTES = MIN_BLOCK_SIZE * sizeof(msize);
+	const static msize MIN_BLOCK_SIZE_BYTES = MIN_BLOCK_SIZE * sizeof(msize);
 
 
-    template <typename T> inline
-    T* place_aligned(void* p, std::size_t sz, std::size_t a = alignof(T))
-    {
-        if (!std::align(a, sizeof(T), p, sz))
-			return nullptr;
-		return reinterpret_cast<T*>(p);
-    }
+	template <typename T> inline
+		T* place_aligned(void* p, std::size_t sz, std::size_t a = alignof(T))
+		{
+			if (!std::align(a, sizeof(T), p, sz))
+				return nullptr;
+			return reinterpret_cast<T*>(p);
+		}
 
 	inline free_node* get_free_node(msize* b, msize n)
 	{
@@ -90,7 +90,7 @@ namespace
 		if (n <= MIN_BLOCK_SIZE)
 			return 0;
 
-        n -= MIN_BLOCK_SIZE;
+		n -= MIN_BLOCK_SIZE;
 
 		msize r = 0;
 		while (n >>= 1)
@@ -103,12 +103,12 @@ namespace
 		assert(n);
 		if (!n->prev_) {
 			head = n->next_;
-            if (head)
-                head->prev_ = nullptr;
+			if (head)
+				head->prev_ = nullptr;
 			return;
 		}
-        
-        assert(n->prev_->next_ == n);
+
+		assert(n->prev_->next_ == n);
 
 		n->prev_->next_ = n->next_;
 		if (n->next_)
@@ -124,7 +124,7 @@ namespace
 			head = n;
 			return;
 		}
-        
+
 		n->next_ = head;
 		head->prev_ = n;
 		head = n;
@@ -145,7 +145,7 @@ heap_chunk::heap_chunk(msize n)
 	for (msize i = 0; i < size_; i += MIN_BLOCK_SIZE*2) {
 		b_[i] = 0;
 	}
-    //memset(b_, 0xcd, sizeof(msize)*size_);
+	//memset(b_, 0xcd, sizeof(msize)*size_);
 
 	msize lnum = log2(size_);
 
@@ -163,20 +163,20 @@ void* heap_chunk::allocate(msize nb)
 {
 	if (!nb)
 		return nullptr;
- 
-    msize nw = std::max(nb + msize(2*sizeof(msize)) //place for block markers
+
+	msize nw = std::max(nb + msize(2*sizeof(msize)) //place for block markers
 			,MIN_BLOCK_SIZE_BYTES);
 
-    nw = (nw % sizeof(msize))? nw/sizeof(msize) + 1: nw/sizeof(msize);
-    
-    assert(size_ >= allocated_space_);
-    if (nw > size_ - allocated_space_)
-        return nullptr;
+	nw = (nw % sizeof(msize))? nw/sizeof(msize) + 1: nw/sizeof(msize);
+
+	assert(size_ >= allocated_space_);
+	if (nw > size_ - allocated_space_)
+		return nullptr;
 
 	if (nw > size_)
 		return nullptr;
 
-    msize ln = log2(nw);
+	msize ln = log2(nw);
 	assert(ln < buckets_.size());
 
 	free_node** head = buckets_.data() + ln;
@@ -211,11 +211,11 @@ void* heap_chunk::allocate(msize nb)
 	}
 
 	//mark the busy block
-    assert(nw >= MIN_BLOCK_SIZE);
+	assert(nw >= MIN_BLOCK_SIZE);
 	*buf = nw;
 	buf[nw-1] = 0;
 
-    allocated_space_ += nw;
+	allocated_space_ += nw;
 
 	return buf + 1;
 }
@@ -226,13 +226,13 @@ void heap_chunk::free(void* p)
 
 	msize n = *b;
 	assert(n);
-    allocated_space_ -= n;
+	allocated_space_ -= n;
 	assert(!b[n-1]); //must be 0
 
 
 	//is space before free
 	//
-	
+
 	if (b_ != b) { //not at the chunk start
 		msize sz =  *(b - 1);
 
@@ -257,7 +257,7 @@ void heap_chunk::free(void* p)
 	}
 
 	add_node(buckets_[log2(n)], make_free_node(b, n));
- }
+}
 
 msize heap_chunk::get_free_space() const
 {
