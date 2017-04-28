@@ -14,13 +14,13 @@ struct meminfo
 {
 	void* p_;
 	msize size_;
-    float rnd_; //random value
-    msize rnd_size_;
+	float rnd_; //random value
+	msize rnd_size_;
 
 	meminfo(msize sz)
 		:p_{}
-		,size_{sz}
-        ,rnd_{(float)std::rand()/(float)RAND_MAX}
+	,size_{sz}
+	,rnd_{(float)std::rand()/(float)RAND_MAX}
 	{}
 };
 
@@ -33,14 +33,14 @@ struct memory
 unsigned long benchmark(msize max_alloc_size, std::vector<meminfo>& mi, memory mem)
 {
 	auto start = chrono::high_resolution_clock::now();
-	
+
 	//allocate all items
 	for (auto& v: mi) {
 		v.p_ = mem.alloc_(v.size_);
 	}
-	
-		//do some random free/alloc
-		//
+
+	//do some random free/alloc
+	//
 	for (auto& v: mi) {
 		if (v.rnd_ < 0.5) { //random free
 			mem.free_(v.p_);
@@ -53,13 +53,13 @@ unsigned long benchmark(msize max_alloc_size, std::vector<meminfo>& mi, memory m
 			v.p_ = mem.alloc_(v.rnd_size_);
 		}
 	}
-	
+
 	for (auto& v: mi) { //free all items
 		mem.free_(v.p_);
 	}
 
 	unsigned long dtm = chrono::duration_cast<chrono::microseconds>(chrono::high_resolution_clock::now() - start).count();
-	
+
 	return dtm;
 }
 
@@ -84,10 +84,10 @@ void range_benchmark(msize from, msize to, msize alloc_num, bool thread_safe)
 		for (msize i = 0; i != MAX_ITEMS; ++i) {
 			msize n =  static_cast<msize>((float)std::rand() * k);
 			if (!n) n += 1;
-            meminfo inf(n);
-            inf.rnd_size_ = static_cast<msize>((float)std::rand() * k);
-            if (!inf.rnd_size_)
-                inf.rnd_size_ = 1;
+			meminfo inf(n);
+			inf.rnd_size_ = static_cast<msize>((float)std::rand() * k);
+			if (!inf.rnd_size_)
+				inf.rnd_size_ = 1;
 			mi.push_back(inf);
 		}
 
@@ -113,7 +113,7 @@ void range_benchmark(msize from, msize to, msize alloc_num, bool thread_safe)
 
 		diff += ft1/ft2;
 	}
-	
+
 	std::cout << "[malloc speed]/[memheap speed]=" << diff/(float)lcnt << std::endl;
 }
 
