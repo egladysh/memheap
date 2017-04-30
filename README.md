@@ -8,7 +8,7 @@ See the benchmark section. For some allocation patterns, memheap is about 100 ti
 ## Build
 
 ### Requirements
-C++11 or newer
+C++11 or later
 
 ### Steps
 * Suppose you have cloned the source to [HOME]/work/memheap
