@@ -142,7 +142,7 @@ heap_chunk::heap_chunk(msize n)
 	b_ = new msize[size_];
 
 	//this will allocate physical memory as much as possible 
-	for (msize i = 0; i < size_; i += MIN_BLOCK_SIZE*2) {
+	for (msize i = 0; i < size_; i += MIN_BLOCK_SIZE*4) {
 		b_[i] = 0;
 	}
 	//memset(b_, 0xcd, sizeof(msize)*size_);

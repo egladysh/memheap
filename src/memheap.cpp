@@ -12,7 +12,6 @@ namespace
 
 	struct scoped_lock
 	{
-		std::mutex* m_;
 		scoped_lock(std::mutex*m)
 			:m_(m)
 		{
@@ -24,6 +23,12 @@ namespace
 			if (m_)
 				m_->unlock();
 		}
+
+	private:
+		std::mutex* m_;
+
+		scoped_lock(const scoped_lock&) = delete;
+		scoped_lock& operator=(const scoped_lock&) = delete;
 	};
 }
 
