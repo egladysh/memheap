@@ -1,14 +1,14 @@
 # memheap
-memheap is a simple, general purpose memory allocator. It has single-thread and multi-thread modes. 
+memheap is a simple, general purpose memory heap. It has single-thread and multi-thread modes. 
 The only difference is that the multi-thread one is guarded with a mutex. The trivial API could be found in [include/memheap/memheap.h](https://github.com/egladysh/memheap/blob/master/include/memheap/memheap.h).
 A standard std::allocator interface is provided in [include/memheap/allocator.h](https://github.com/egladysh/memheap/blob/master/include/memheap/allocator.h), that could be used with STL containers, etc..
-Depending on your application, it could be much faster than standard malloc/free. 
-See the benchmark section. For some allocation patterns, memheap is about 100 times faster. 
+Depending on your application, it could be much faster than calling malloc/free directly.
+See the benchmark section. For some allocation patterns, memheap is about 100 times faster. Having said that, memheap isn't a malloc replacement by any means.
 
 ## Build
 
 ### Requirements
-C++11 or newer
+C++11 or later
 
 ### Steps
 * Suppose you have cloned the source to [HOME]/work/memheap
