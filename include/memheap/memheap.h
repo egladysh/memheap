@@ -24,7 +24,9 @@ namespace memheap
 
 		heap_chunk* cur_heap_;
 
-		std::vector<heap_chunk*> hs_;
+		typedef std::vector<heap_chunk*> chunks;
+
+		chunks hs_;
 		std::mutex* mtx_;
 
 		heap(const heap&) = delete;

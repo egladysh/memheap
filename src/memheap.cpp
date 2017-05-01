@@ -1,5 +1,6 @@
 #include <memheap/memheap.h>
 #include <stdexcept>
+#include <algorithm>
 #include <new>
 #include <limits>
 #include <assert.h>
@@ -67,6 +68,7 @@ heap::heap(bool thread_safe, msize est_max_size, msize est_cnt)
 			cur_heap_ = ph;
 		hs_.push_back(ph);
 	}
+	std::sort(hs_.begin(), hs_.end(), [](const chunks::value_type& v1, const chunks::value_type& v2) -> bool { return v1->get_range().end_ < v2->get_range().end_; } );
 
 	if (thread_safe) {
 		mtx_ = new std::mutex;
@@ -106,6 +108,7 @@ void* heap::do_allocate(msize n)
 			cur_heap_ = new heap_chunk(n * 2);
 			hs_.push_back(cur_heap_);
 		}
+		std::sort(hs_.begin(), hs_.end(), [](const chunks::value_type& v1, const chunks::value_type& v2) -> bool { return v1->get_range().end_ < v2->get_range().end_; } );
 
 		pr = cur_heap_->allocate(n);
 		if (!pr) {
@@ -141,6 +144,26 @@ void heap::free(void* p)
 		return;
 	}
 
+
+	assert(!hs_.empty());
+
+
+	//
+	auto it = std::upper_bound(hs_.begin(), hs_.end(), p, [](void* pb, const chunks::value_type& v)->bool 
+			{
+				heap_chunk::range hr = v->get_range();
+				if (hr.end_ > pb) 
+					return true;
+				return false;
+			} );
+	assert(it != hs_.end());
+
+	assert((*it)->get_range().start_ <= p && (*it)->get_range().end_ > p);
+	cur_heap_ = (*it);
+	cur_heap_->free(p);
+	
+
+	/*
 	for (auto v: hs_) {
 		if (cur_heap_ == v)
 			continue;
@@ -153,6 +176,7 @@ void heap::free(void* p)
 	}
 
 	assert(false);
+	*/
 }
 
 msize heap::get_free_space() const
