@@ -102,13 +102,23 @@ void* heap::do_allocate(msize n)
 		//create a new heap
 		if (n < chunk_size_) {
 			cur_heap_ = new heap_chunk(chunk_size_);
-			hs_.push_back(cur_heap_);
 		}
 		else { //big size
 			cur_heap_ = new heap_chunk(n * 2);
-			hs_.push_back(cur_heap_);
+			
 		}
+		hs_.push_back(cur_heap_);
+
+		// keep chunks sorted
 		std::sort(hs_.begin(), hs_.end(), [](const chunks::value_type& v1, const chunks::value_type& v2) -> bool { return v1->get_range().end_ < v2->get_range().end_; } );
+		
+		/*
+		hs_.insert( std::upper_bound(hs_.begin(), hs_.end(), cur_heap_, 
+					[](const chunks::value_type& v1, const chunks::value_type& v2) -> bool { return v1->get_range().end_ < v2->get_range().end_; }
+					)
+					,cur_heap_
+					);
+					*/
 
 		pr = cur_heap_->allocate(n);
 		if (!pr) {
