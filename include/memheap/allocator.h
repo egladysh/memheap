@@ -101,7 +101,7 @@ namespace memheap
 		size_type max_size() const { return std::numeric_limits<msize>::max(); }
 
 		//byte size alloctor, do nothing
-		void construct(pointer p, const T& val) {}
+		void construct(pointer p, const T& val) { *p = val; }
 		void destroy(pointer p) {}
 
 		bool operator!=(const allocator&)
