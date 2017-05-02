@@ -87,7 +87,7 @@ namespace
 
 
 	msize log2(msize n) {
-		if (n <= MIN_BLOCK_SIZE)
+		if (n <= MIN_BLOCK_SIZE + 1)
 			return 0;
 
 		n -= MIN_BLOCK_SIZE;
