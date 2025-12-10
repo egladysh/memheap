@@ -36,9 +36,18 @@ C++11 or later
     
 	$./benchmark
 
+* To build and run unit tests:
+    $make heaptest
+    $./heaptest
+
 * To install the library, do:
 
 	$make install
+
+You can then use it in your cmake projects with:
+
+    find_package(memheap REQUIRED)
+    target_link_libraries(your_target memheap::memheap)
 	
 ## Benchmarks
 

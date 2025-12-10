@@ -112,7 +112,7 @@ void* heap::do_allocate(msize n)
 		// keep chunks sorted
 		std::sort(hs_.begin(), hs_.end(), [](const chunks::value_type& v1, const chunks::value_type& v2) -> bool { return v1->get_range().end_ < v2->get_range().end_; } );
 		
-		/*
+		/* just sorting seems to be faster than inserting in sorted order
 		hs_.insert( std::upper_bound(hs_.begin(), hs_.end(), cur_heap_, 
 					[](const chunks::value_type& v1, const chunks::value_type& v2) -> bool { return v1->get_range().end_ < v2->get_range().end_; }
 					)
